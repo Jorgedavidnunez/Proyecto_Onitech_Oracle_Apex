@@ -1,0 +1,19 @@
+name: ci-apex
+
+on: [push]   # se ejecuta en cada push a cualquier rama
+
+jobs:
+  zap_and_smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: OWASP ZAP Baseline
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: ${{ vars.TEST_BASE_URL }}   # URL pública de tu app APEX
+        continue-on-error: true               # no falla el job por findings (sirve para evidenciar)
+
+      - name: Smoke test (HTTP 200)
+        run: |
+          sudo apt-get update && sudo apt-get install -y curl
+          # Debe responder 200 OK
+          curl -s -o /dev/null -w "%{http_code}\n" "${{ vars.TEST_SMOKE_URL }}" | grep -q "200"
