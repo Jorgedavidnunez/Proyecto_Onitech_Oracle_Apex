@@ -1,6 +1,6 @@
 name: ci-apex
 
-on: [push]   # se ejecuta en cada push a cualquier rama
+on: [push]   
 
 jobs:
   zap_and_smoke:
@@ -9,8 +9,8 @@ jobs:
       - name: OWASP ZAP Baseline
         uses: zaproxy/action-baseline@v0.14.0
         with:
-          target: ${{ vars.TEST_BASE_URL }}   # URL pública de tu app APEX
-        continue-on-error: true               # no falla el job por findings (sirve para evidenciar)
+          target: ${{ vars.TEST_BASE_URL }}   
+        continue-on-error: true             
 
       - name: Smoke test (HTTP 200)
         run: |
